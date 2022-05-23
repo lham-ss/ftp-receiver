@@ -4,25 +4,30 @@ const port = 21;
 
 const ftpServer = new FtpSrv({
     url: "ftp://0.0.0.0:" + port,
-    anonymous: true
+    anonymous: false,
 });
 
-ftpServer.on('login', (connection, resolve, reject) => {
-    if (connection.username === 'anonymous' && connection.password === 'anonymous') {
-
-        connection.on('STOR', (err, fileName) => {
-            if (err) {
-                console.trace(err);
-            }
-            else {
-                console.log(`*** received ${fileName} via ftp. Trigger data processing here.`);
-            }
-        });
-
-        return resolve({ root: "/" });
+const fileReceivedEvent = (err, fileName) => {
+    if (err) {
+        console.trace(err);
     }
-    return reject(new errors.GeneralError('Invalid username or password', 401));
+    else {
+        console.log(`\n\n*** received ${fileName} via ftp!\n\nnow we will process the file and save the data!\n\n`);
+        // handle file here
+    }
+};
+
+ftpServer.on('login', (ftp, resolve, reject) => {
+    if (ftp.username === 'rivenrock' && ftp.password === '@rivenRock') {
+
+        ftp.connection.on('STOR', fileReceivedEvent);
+
+        return resolve({ root: "/ftp" });
+    }
+
+    return reject(new FtpSrv.ftpErrors.GeneralError('Invalid username or password', 401));
 });
+
 
 ftpServer.listen().then(() => {
     console.log('Ftp server is starting...')
