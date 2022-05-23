@@ -1,0 +1,30 @@
+{
+  "name": "ftp-receiver",
+  "version": "1.0.0",
+  "description": "wait for incoming ftp files, process when received",
+  "main": "index.js",
+  "dependencies": {
+    "dtrace-provider": "^0.8.8",
+    "ftp-srv": "^4.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lham-ss/ftp-receiver.git"
+  },
+  "keywords": [
+    "ftp",
+    "server",
+    "process",
+    "file"
+  ],
+  "author": "Lawrence Ham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lham-ss/ftp-receiver/issues"
+  },
+  "homepage": "https://github.com/lham-ss/ftp-receiver#readme"
+}
