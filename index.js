@@ -5,15 +5,39 @@ const FtpSrv = require('ftp-srv');
 const port = process.env.FTP_PORT ?? 21;
 
 
-const resolverFunction = (address) => {
-    console.log('\n\nresolverFunction: ', address);
+const { networkInterfaces } = require('os');
+const { Netmask } = require('netmask');
 
-    return "54.184.195.144";
+const nets = networkInterfaces();
+function getNetworks() {
+    let networks = {};
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            if (net.family === 'IPv4' && !net.internal) {
+                networks[net.address + "/24"] = net.address
+            }
+        }
+    }
+    return networks;
+}
+
+const resolverFunction = (address) => {
+    const networks = getNetworks();
+
+    console.log('***************** HERE WE ARE ********************');
+
+    for (const network in networks) {
+        if (new Netmask(network).contains(address)) {
+            return networks[network];
+        }
+    }
+
+    return "127.0.0.1";
 }
 
 const ftpServer = new FtpSrv({
     url: "ftp://0.0.0.0:" + port,
-    pasv_url: resolverFunction,
+    "pasv_url": resolverFunction,
     pasv_min: 49152,
     pasv_max: 65535,
     anonymous: false,
@@ -40,6 +64,9 @@ ftpServer.on('login', (ftp, resolve, reject) => {
 
     return reject(new FtpSrv.ftpErrors.GeneralError('Invalid username or password', 401));
 });
+
+
+console.log(getNetworks());
 
 
 ftpServer.listen().then(() => {
