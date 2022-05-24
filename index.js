@@ -6,7 +6,7 @@ const port = process.env.FTP_PORT ?? 21;
 
 
 const resolverFunction = (address) => {
-    console.log(address);
+    console.log('\n\nresolverFunction: ', address);
 
     return "54.184.195.144";
 }
@@ -14,6 +14,8 @@ const resolverFunction = (address) => {
 const ftpServer = new FtpSrv({
     url: "ftp://0.0.0.0:" + port,
     pasv_url: resolverFunction,
+    pasv_min: 49152,
+    pasv_max: 65535,
     anonymous: false,
 });
 
