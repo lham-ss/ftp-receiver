@@ -4,8 +4,16 @@ const FtpSrv = require('ftp-srv');
 
 const port = process.env.FTP_PORT ?? 21;
 
+
+const resolverFunction = (address) => {
+    console.log(address);
+
+    return "54.184.195.144";
+}
+
 const ftpServer = new FtpSrv({
     url: "ftp://0.0.0.0:" + port,
+    pasv_url: resolverFunction,
     anonymous: false,
 });
 
