@@ -7,7 +7,8 @@
     "dotenv": "^16.0.1",
     "dtrace-provider": "^0.8.8",
     "ftp-srv": "^4.6.1",
-    "netmask": "^2.0.2"
+    "netmask": "^2.0.2",
+    "public-ip": "^4.0.4"
   },
   "devDependencies": {},
   "scripts": {
